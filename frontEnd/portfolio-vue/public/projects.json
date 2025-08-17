@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Campus Community & Map",
+    "description": "주변 편의시설 공유 + 커뮤니티",
+    "tags": ["Django", "Kakao Map", "PostgreSQL"],
+    "imageUrl": "https://picsum.photos/seed/p1/800/400",
+    "demoUrl": "#",
+    "codeUrl": "#"
+  },
+  {
+    "id": 2,
+    "title": "Data Crawler & ETL",
+    "description": "크롤링/정제/적재 배치 파이프라인",
+    "tags": ["Java", "Spring Batch", "MySQL"],
+    "imageUrl": "https://picsum.photos/seed/p1/800/400",
+    "demoUrl": "#",
+    "codeUrl": "#"
+  }
+]

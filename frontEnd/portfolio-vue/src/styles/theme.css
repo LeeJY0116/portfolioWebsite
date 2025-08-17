@@ -1,0 +1,8 @@
+/* src/styles/theme.css */
+:root {
+  --bs-primary: #6366f1;        /* indigo-500 느낌 */
+  --bs-primary-rgb: 99, 102, 241;
+  --bs-link-color: var(--bs-primary);
+  --bs-link-hover-color: #4f46e5;
+  --bs-body-color: #1f2937;     /* 텍스트 살짝 진하게 */
+}

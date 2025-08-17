@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
     <div class="container">
-      <RouterLink class="navbar-brand fw-semibold" to="/">LJ</RouterLink>
+      <RouterLink class="navbar-brand fw-semibold" to="/">이주엽 포트폴리오</RouterLink>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
         <span class="navbar-toggler-icon"></span>
@@ -17,3 +17,10 @@
     </div>
   </nav>
 </template>
+  <style scoped>
+  /* 활성 링크 강조 */
+  .router-link-active.nav-link {
+    font-weight: 600;
+    color: var(--bs-primary) !important;
+  }
+  </style>

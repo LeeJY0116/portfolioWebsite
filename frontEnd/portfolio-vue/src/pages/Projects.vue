@@ -1,37 +1,34 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+const base = import.meta.env.VITE_API_BASE
+console.log('BASE =', import.meta.env.VITE_API_BASE)
+const projects = ref([])
+const status = ref('loading') // 'loading' | 'ok' | 'error'
 
-const projects = ref([
-  {
-    id: 1, title: 'Campus Community & Map',
-    description: '주변 편의점 공유 + 커뮤니티',
-    tags: ['Django','Kakao Map','PostgreSQL'],
-    imageUrl: 'https://picsum.photos/seed/p1/800/400',
-    demoUrl: '#', codeUrl: '#'
-  },
-  {
-    id: 2, title: 'Data Crawler & ETL',
-    description: '크롤링/정제/적재 배치 파이프라인',
-    tags: ['Java','Spring Batch','MySQL'],
-    imageUrl: 'https://picsum.photos/seed/p2/800/400',
-    demoUrl: '#', codeUrl: '#'
+onMounted(async () => {
+  try {
+    const { data } = await axios.get(import.meta.env.VITE_API_BASE + '/api/projects', {
+      // 캐시 무효화가 필요하면:
+      headers: { 'Cache-Control': 'no-cache' }
+    })
+    projects.value = data
+    status.value = 'ok'
+  } catch (e) {
+    console.error('[Projects] API error:', e)
+    status.value = 'error'
   }
-])
-
-// Spring 연결 시 이렇게 교체:
-// onMounted(async () => {
-//   const { data } = await axios.get(import.meta.env.VITE_API_BASE + '/api/projects')
-//   projects.value = data
-// })
+})
 </script>
 
 <template>
   <section class="py-4">
     <h2 class="h4 mb-4">Featured Projects</h2>
-    <div class="row g-4">
+    <div v-if="status==='loading'">Loading…</div>
+    <div v-else-if="status==='error'" class="text-muted">데이터를 불러오지 못했습니다.</div>
+    <div v-else class="row g-4">
       <div v-for="p in projects" :key="p.id" class="col-md-6 col-lg-4">
-        <article class="card h-100">
+        <article class="card h-100 shadow-sm">
           <img v-if="p.imageUrl" :src="p.imageUrl" class="card-img-top" alt="cover">
           <div class="card-body">
             <h3 class="h6 card-title">{{ p.title }}</h3>
