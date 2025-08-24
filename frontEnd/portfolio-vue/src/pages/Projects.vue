@@ -1,10 +1,26 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import ImageLightbox from '@/components/ImageLightbox.vue'
+
+
 const base = import.meta.env.VITE_API_BASE;
 console.log("BASE =", import.meta.env.VITE_API_BASE);
 const projects = ref([]);
 const status = ref("loading"); // 'loading' | 'ok' | 'error'
+
+// 라이트박스 상태
+const lightboxOpen = ref(false)
+const lightboxImages = ref([])
+const lightboxStart = ref(0)
+
+const openLightbox = (p, start = 0) => {
+  // p.images 배열이 있으면 사용, 없으면 imageUrl 하나만
+  lightboxImages.value = (p.images && p.images.length) ? p.images : (p.imageUrl ? [p.imageUrl] : [])
+  if (!lightboxImages.value.length) return
+  lightboxStart.value = start
+  lightboxOpen.value = true
+}
 
 onMounted(async () => {
   try {
@@ -38,7 +54,11 @@ onMounted(async () => {
             v-if="p.imageUrl"
             :src="p.imageUrl"
             class="card-img-top"
+            style="aspect-ratio:16/9; object-fit:cover; cursor: zoom-in;"
             alt="cover"
+            loading="lazy"
+            @click="openLightbox(p, 0)"
+            @error="e => (e.target.style.display='none')"
           />
           <div class="card-body">
             <h3 class="h6 card-title">{{ p.title }}</h3>
@@ -48,28 +68,65 @@ onMounted(async () => {
                 v-for="t in p.tags"
                 :key="t"
                 class="badge text-bg-light border"
-                >{{ t }}</span
-              >
+                >{{ t }}</span>
             </div>
             <div class="d-flex gap-3">
               <a
                 v-if="p.demoUrl"
                 :href="p.demoUrl"
                 target="_blank"
-                class="link-primary small"
-                >Demo</a
-              >
+                class="btn btn-chip btn-sm d-inline-fles align-items-center gap-2"
+                >
+                <i class="bi bi-book"></i>
+                Read Me
+                </a>
               <a
                 v-if="p.codeUrl"
                 :href="p.codeUrl"
                 target="_blank"
-                class="link-primary small"
-                >Code</a
-              >
+                class="btn btn-chip btn-sm d-inline-fles align-items-center gap-2"
+                >
+                <i class="bi bi-code"></i>
+                Code
+                </a>
+                <!-- 이미지: 라이트박스 열기 -->
+                <button
+                  v-if="(p.images && p.images.length)"
+                  type="button"
+                  class="btn btn-chip btn-sm d-inline-flex align-items-center gap-2"
+                  @click="openLightbox(p, 0)"
+                >
+                  <i class="bi bi-image"></i>
+                  <span>이미지</span>
+                </button>
             </div>
           </div>
         </article>
       </div>
     </div>
+    <!-- 라이트박스 -->
+    <ImageLightbox
+      :images="lightboxImages"
+      :show="lightboxOpen"
+      :start="lightboxStart"
+      @close="lightboxOpen=false"
+      />
   </section>
 </template>
+
+<style scoped>
+.btn-chip {
+  --bs-btn-bg: white;
+  --bs-btn-color: #111;
+  --bs-btn-border-color: rgba(0,0,0,.2);
+  --bs-btn-hover-bg: #f8f9fa;
+  --bs-btn-hover-border-color: rgba(0,0,0,.35);
+  --bs-btn-active-bg: #eef1f4;
+  --bs-btn-padding-x: .3rem;
+  --bs-btn-padding-y: .1rem;
+  border-radius:10px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+.btn-chip .bi { font-size: 1rem; line-height: 1; }
+</style>

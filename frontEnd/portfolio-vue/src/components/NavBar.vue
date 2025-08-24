@@ -23,7 +23,7 @@
             <RouterLink class="nav-link" to="/projects">Projects</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/contact">Contact</RouterLink>
+            <RouterLink class="nav-link" to="/etc">ETC</RouterLink>
           </li>
         </ul>
       </div>

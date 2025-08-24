@@ -16,14 +16,20 @@ public class ProjectController {
                         "주변 편의시설 공유 + 커뮤니티",
                         List.of("Django","Kakao Map","PostgreSQL"),
                         "https://picsum.photos/seed/p1/800/400",
-                        "#", "#"
+                        "#", "#",
+                        List.of( // 추가 이미지들
+                                 )
                 ),
                 new ProjectDto(
-                        2L, "Data Crawler & ETL",
-                        "크롤링/정제/적재 배치 파이프라인",
-                        List.of("Java","Spring Batch","MySQL"),
-                        "https://picsum.photos/seed/p2/800/400",
-                        "#", "#"
+                        2L, "Portfolio WebSite",
+                        "스프링과 뷰를 이용한 자기소개 웹사이트",
+                        List.of("Java","Spring Boot","MySQL"),
+                        "/images/projects/project2/project2-1.png",
+                        "#", "#",
+                        List.of(
+                                "/images/projects/project2/project2-1.png",
+                                "/images/projects/project2/project2-2.png"
+                        )
                 )
         );
     }

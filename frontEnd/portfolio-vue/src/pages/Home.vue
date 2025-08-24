@@ -1,19 +1,20 @@
 <template>
-  <!-- Hero (기존) -->
   <section class="py-5">
     <div class="row align-items-center">
       <div class="col-lg-7">
-        <span class="badge text-bg-primary mb-3">Java / Spring Developer</span>
-        <h1 class="display-5 fw-bold mb-3">
-          만들고 성장하는 개발자 <span class="text-primary">이주엽</span>입니다
+        <span class="badge text-bg-dark mb-3">Backend Developer</span>
+        <h1 class="display-6 fw-bold mb-3">
+          성장하는 개발자 <span class="text-primary">이주엽</span>입니다
         </h1>
         <p class="text-muted mb-4">
-          Spring Boot와 SQL 중심으로 확장 가능한 백엔드를 만들고,
-          REST API와 보안을 고려한 설계를 지향합니다.
+          안녕하세요.
+          <br>
+          끊임없이 배우고 성장하는 개발자
+          이주엽입니다.
         </p>
         <div class="d-flex gap-2">
           <RouterLink class="btn btn-primary" to="/projects">View Projects</RouterLink>
-          <a class="btn btn-outline-secondary" href="/resume.pdf" download>Download CV</a>
+          <a class="btn btn-outline-secondary" href="/resume.pdf" download>Download PDF</a>
         </div>
       </div>
       <div class="col-lg-5 mt-4 mt-lg-0">
@@ -196,6 +197,44 @@
     </div>
   </div>
 </section>
+
+<!-- PROJECTS (하이라이트) -->
+<section class="py-5 border-top">
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <i class="bi bi-link-45deg fs-3 text-primary"></i>
+    <h2 class="section-title m-0">PROJECTS</h2>
+  </div>
+  <p class="text-muted small mb-4">주요 프로젝트만 보기</p>
+
+  <div class="row g-4">
+    <div v-for="mp in miniProjects" :key="mp.id" class="col-md-6">
+      <article class="card shadow-sm rounded-4 h-100 p-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge text-bg-danger">{{ mp.badge }}</span>
+          <span class="text-muted small">{{ mp.period }}</span>
+        </div>
+        <h3 class="h5 fw-bold mb-2">{{ mp.title }}</h3>
+        <p class="text-muted small mb-3">{{ mp.brief }}</p>
+        <p class="text-muted small mb-3">{{ mp.brief2 }}</p>
+        <p class="text-muted small mb-3">{{ mp.brief3 }}</p>
+        <p class="text-muted small mb-3">{{ mp.brief4 }}</p>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span v-for="t in mp.tags" :key="t" class="chip">{{ t }}</span>
+        </div>
+
+        <div class="d-flex gap-2">
+          <RouterLink :to="mp.to || '/projects'"
+          class="btn btn-chip btn-sm d-inline-fles align-items-center gap-2">
+          <i class="bi bi-book"></i>
+          자세히
+          </RouterLink>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 </template>
 
 <script setup>
@@ -209,10 +248,41 @@ const archives = [
     icon: 'bi-github'
   },
 ]
+
+const miniProjects = [
+  {
+    id: 'portfolio',
+    badge: '1人 개인 프로젝트',
+    period: '2025.08',
+    title: '포트폴리오 웹사이트',
+    brief: '• 세상에 하나뿐인 나만의 포트폴리오 웹 사이트 개발',
+    brief2: '• Spring Boot와 Vue.js를 사용하여 프론트와 백을 함께 경험',
+    brief3: '',
+    tags: ['Spring Boot', 'Vue.js'],
+    demo: 'https://it-eldorado.com',
+    to: '/projects'
+  },
+  {
+    id: 'cns',
+    badge: '3人 팀 프로젝트',
+    period: '2025.03',
+    title: '편의점 위치 공유 및 커뮤니티',
+    brief: '• 조별과제로 하게 된 웹사이트 구현',
+    brief2: '• Django프레임워크를 이용하여 개발',
+    brief3: '• 최초 웹 개발 경험(HTML,CSS,JS,Django)',
+    brief4: '• 최초 협업 경험(Git)',
+    tags: ['Python', 'Django', 'KaKaoMap API'],
+    to: '/projects'
+  },
+]
+
 </script>
 
 
 <style scoped>
+#badge {
+background: white;
+}
 /* Hero 오른쪽 상자 그라디언트 */
 .hero-box {
   background: linear-gradient(135deg, #6366f1, #22d3ee);
