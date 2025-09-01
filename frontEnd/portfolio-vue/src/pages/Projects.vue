@@ -1,8 +1,20 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import ReadmeModal from '@/components/ReadmeModal.vue'
 import axios from "axios";
 import ImageLightbox from '@/components/ImageLightbox.vue'
 
+
+const readmeOpen = ref(false)
+const readmeTitle = ref('')
+const readmeSrc = ref('')
+
+const openReadme = (p) => {
+  readmeTitle.value = `${p.title} – README.md`
+  // p.readmeUrl이 있으면 사용, 없으면 id 기반 기본 경로
+  readmeSrc.value = p.readmeUrl || `/readme/${p.id}.md`
+  readmeOpen.value = true
+}
 
 const base = import.meta.env.VITE_API_BASE;
 console.log("BASE =", import.meta.env.VITE_API_BASE);
@@ -70,18 +82,16 @@ onMounted(async () => {
                 class="badge text-bg-light border"
                 >{{ t }}</span>
             </div>
-            <div class="d-flex gap-3">
+            <div class="d-flex flex-wrap gap-2 mt-2">
+              <button
+                type="button"
+                class="btn btn-chip btn-sm d-inline-flex align-items-center gap-2"
+                @click="openReadme(p)"
+              >
+                <i class="bi bi-journal-text"></i><span>README</span>
+              </button>
               <a
-                v-if="p.demoUrl"
-                :href="p.demoUrl"
-                target="_blank"
-                class="btn btn-chip btn-sm d-inline-fles align-items-center gap-2"
-                >
-                <i class="bi bi-book"></i>
-                Read Me
-                </a>
-              <a
-                v-if="p.codeUrl"
+                v-if="(p.codeUrl && p.codeUrl.length >1)"
                 :href="p.codeUrl"
                 target="_blank"
                 class="btn btn-chip btn-sm d-inline-fles align-items-center gap-2"
@@ -110,6 +120,13 @@ onMounted(async () => {
       :show="lightboxOpen"
       :start="lightboxStart"
       @close="lightboxOpen=false"
+      />
+
+    <ReadmeModal
+      :show="readmeOpen"
+      :title="readmeTitle"
+      :src="readmeSrc"
+      @close="readmeOpen = false"
       />
   </section>
 </template>

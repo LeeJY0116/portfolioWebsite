@@ -7,7 +7,7 @@ public record ProjectDto(
         String description,
         List<String> tags,
         String imageUrl,
-        String demoUrl,
+        String readmeUrl,
         String codeUrl,
         List<String> images
 ) {}

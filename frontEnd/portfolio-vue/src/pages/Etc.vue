@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch} from 'vue'
 
 const SIZE = 15                        // 보드 크기 (원하면 19로)
 const board = ref(Array.from({ length: SIZE }, () => Array(SIZE).fill(0))) // 0=빈칸, 1=흑, 2=백
@@ -10,6 +10,7 @@ const history = ref([])                // 스택: { r, c, player }
 const winningLine = ref([])            // [[r,c],...]
 
 // 안내 문구 (6목 자동 취소 등)
+const winLen = ref(5)                // ✅ 승리 길이 선택 (4 또는 5)
 const notice = ref('')
 let noticeTimer
 const showNotice = (msg, ms = 2600) => {
@@ -17,6 +18,13 @@ const showNotice = (msg, ms = 2600) => {
   notice.value = msg
   noticeTimer = setTimeout(() => (notice.value = ''), ms)
 }
+
+watch(winLen, (n, o) => {
+  if (n !== o) {
+    reset()
+    showNotice(`${n}목 모드로 변경했습니다. (정확히 ${n}목만 인정. ${n + 1}목 이상 금지)`)
+  }
+})
 
 const currentLabel = computed(() =>
   winner.value
@@ -42,13 +50,13 @@ function lineCount(r, c, dr, dc, player) {
   return { count, line }
 }
 
-// ✅ “정확히 5목” 판정: 5면 승리, 6↑면 overline
+// ✅ “정확히 N목” 판정, N보다 ↑면 overline(N = winLen.value)
 function checkExactFive(r, c, player) {
   const dirs = [[1,0],[0,1],[1,1],[1,-1]]
   for (const [dr, dc] of dirs) {
     const { count, line } = lineCount(r, c, dr, dc, player)
-    if (count > 5)   return { type: 'overline' }
-    if (count === 5) return { type: 'win', line }
+    if (count > winLen.value)   return { type: 'overline' }
+    if (count === winLen.value) return { type: 'win', line }
   }
   return { type: 'none' }
 }
@@ -69,9 +77,9 @@ const place = (r, c) => {
   }
 
   if (res.type === 'overline') {
-    // 6목 이상 → 자동 되돌리기 + 안내
+    // N+1목 이상 → 자동 되돌리기 + 안내
     undo()
-    showNotice('6목 이상은 불가능합니다. (정확히 5목만 인정)')
+    showNotice(`${winLen.value +1}목 이상은 불가능합니다. (정확히 ${winLen.value}만 인정)`)
     return
   }
 
@@ -105,14 +113,22 @@ const reset = () => {
     <div class="d-flex align-items-center gap-2 mb-3">
       <span class="badge text-bg-secondary">{{ SIZE }}×{{ SIZE }}</span>
       <span class="fw-semibold" :class="winner ? 'text-success' : 'text-primary'">{{ currentLabel }}</span>
-      <div class="ms-auto d-flex gap-2">
+
+      <!-- ✅ 승리 조건 선택: 4목 / 5목 -->
+      <div class="btn-group btn-group-sm ms-auto" role="group" aria-label="Win length">
+        <input type="radio" class="btn-check" id="rule4" :value="4" v-model.number="winLen">
+        <label class="btn btn-outline-secondary" for="rule4">4목</label>
+        <input type="radio" class="btn-check" id="rule5" :value="5" v-model.number="winLen">
+        <label class="btn btn-outline-secondary" for="rule5">5목</label>
+      </div>
+
         <button class="btn btn-outline-secondary btn-sm" @click="undo" :disabled="!history.length || winner">Undo</button>
         <button class="btn btn-primary btn-sm" @click="reset">Restart</button>
-      </div>
     </div>
-    <div v-if="notice" class="alert alert-danger py-2 px-3 small mb-3">
+    <div v-if="notice" class="alert alert-primary py-2 px-3 small mb-3">
       {{ notice }}
     </div>
+
     <!-- 보드 -->
     <div class="omok-wrap">
         <div class="omok-board" :style="{ '--size': SIZE }">
@@ -140,8 +156,8 @@ const reset = () => {
         </div>
     </div>
 
-    <p class="text-muted small mt-3">  규칙: 가로/세로/대각선으로 <strong>정확히 다섯 개</strong>를 잇는 사람이 승리합니다.
-    <strong>6목 이상은 금지</strong>이며, 두면 자동으로 되돌려집니다.</p>
+    <p class="text-muted small mt-3">  규칙: 가로/세로/대각선으로 <strong>정확히 {{ winLen }} 개</strong>를 잇는 사람이 승리합니다.
+    <strong>{{ winLen + 1 }}목 이상은 금지</strong>이며, 두면 자동으로 되돌려집니다.</p>
   </section>
 </template>
 

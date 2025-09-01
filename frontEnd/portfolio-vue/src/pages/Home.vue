@@ -8,7 +8,7 @@
         <div class="col-lg-7">
             <span class="badge text-bg-dark mb-3">Backend Developer</span>
             <h1 class="display-6 fw-bold mb-3">
-              성장하는 개발자 <span class="text-primary">이주엽</span>입니다
+              성장하는 개발자 이주엽입니다
             </h1>
             <p class="text-muted mb-4">
               안녕하세요.<br>
@@ -60,10 +60,10 @@
 
           <div class="col">
             <div class="d-flex align-items-start gap-3" >
-              <!-- i class="bi bi-geo-alt fs-4 text-secondary"></i-->
+              <i class="bi bi-geo-alt fs-4 text-secondary"></i>
               <div>
-                <div class="text-muted small"></div>
-                <div class="fw-semibold"></div>
+                <div class="text-muted small">학력</div>
+                <div class="fw-semibold">청주대학교(학사)</div>
               </div>
             </div>
           </div>
@@ -222,7 +222,7 @@
         <i class="bi bi-link-45deg fs-3 text-primary"></i>
         <h2 class="section-title m-0">PROJECTS</h2>
       </div>
-      <p class="text-muted small mb-4">주요 프로젝트만 보기</p>
+      <p class="text-muted small mb-4 ">주요 프로젝트만 보기<span class='text-primary'>(개발 예정)</span></p>
 
       <div class="row g-4">
         <div v-for="mp in miniProjects" :key="mp.id" class="col-md-6">
@@ -347,8 +347,8 @@ const miniProjects = [
   {
     id: 'cns',
     badge: '3人 팀 프로젝트',
-    period: '2025.03',
-    title: '편의점 위치 공유 및 커뮤니티',
+    period: '2022.06',
+    title: '편의점 위치 공유 및 커뮤니티(CSN)',
     brief: '• 조별과제로 하게 된 웹사이트 구현',
     brief2: '• Django프레임워크를 이용하여 개발',
     brief3: '• 최초 웹 개발 경험(HTML,CSS,JS,Django)',
